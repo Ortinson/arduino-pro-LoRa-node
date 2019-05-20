@@ -34,7 +34,7 @@
 #include <LowPower.h>
 #include  "adcvcc.h"
 
-#define SLEEPINTERVAL 300 // 5min sleep
+#define SLEEPINTERVAL 10 // 5min sleep
 
 byte LMIC_transmitted = 0;
 int LMIC_event_Timeout = 0;
@@ -243,7 +243,7 @@ void setup() {
   uint8_t mcusr = MCUSR;
   MCUSR = 0;
 
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println(F("Boot"));
 
   showBootStatus(mcusr);
@@ -309,16 +309,17 @@ void setup() {
   LMIC.dn2Dr = DR_SF9;
 
   // Set data rate and transmit power for uplink (note: txpow seems to be ignored by the library)
-  //LMIC_setDrTxpow(DR_SF7,14);
+  LMIC_setDrTxpow(DR_SF7,14);
 
-  forceTxSingleChannelDr();
+  // forceTxSingleChannelDr();
   LMIC_setClockError(MAX_CLOCK_ERROR * 1 / 100);
 
 }
 
 void loop() {
 
-  if (!bootFromBrownOut)
+  // 
+  if (true)
   {  
     if(Serial) {
       Serial.println(F("Envio ping"));
@@ -357,7 +358,7 @@ void loop() {
 
   for (int i = 0; i < SLEEPINTERVAL; i+=8)
   {
-    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+    LowPower.powerDown(SLEEP_1S, ADC_OFF, BOD_OFF);
   }
   Serial.println(F("Despierto!"));
 
